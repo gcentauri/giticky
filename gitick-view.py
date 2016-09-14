@@ -1,13 +1,8 @@
 from flask import Flask, render_template
 from flask_flatpages import FlatPages
 
-DEBUG = True
-FLATPAGES_AUTO_RELOAD = DEBUG
-FLATPAGES_EXTENSION = '.md'
-FLATPAGES_ROOT = 'gitick.giticky'
-
 app = Flask(__name__)
-app.config.from_object(__name__)
+app.config.from_pyfile('gitick-view.cfg')
 pages = FlatPages(app)
 
 @app.route('/')

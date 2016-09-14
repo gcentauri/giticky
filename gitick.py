@@ -6,7 +6,7 @@ def new():
     sh.cd( gitick_project )
     sh.echo( '.', _out='.gitick' )
     sh.mkdir( 'new' )
-    sh.echo( '..', _out='new/need-info/.gitick' )
+    sh.echo( '..', _out='new/.gitick' )
     sh.mkdir( 'new/need-info' )
     sh.echo( '../..', _out='new/need-info/.gitick' )
     sh.git( 'init', '.' )
