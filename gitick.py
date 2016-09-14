@@ -25,13 +25,14 @@ def add():
     title = input( 'New ticket name: ' )
     ticket_file = ( 'new/' + title + '.md' )
     priority = str( 'priority: ' + input('Priority: ') )
-
+    tags = str('tags: ' + input('Tags (separate by commas): '))
+    
     ## please show me a better way to do this, i'm just doing a dumb
     ## translation of the sh script
     
     with open( ticket_file, 'w' ) as ticket:
         ticket.write(priority + '\n')
-        ticket.write('tags: \n')
+        ticket.write(tags + '\n')
         ticket.write('date: ' + str(sh.date()))
         ticket.write('reported: ' + str(sh.git('config', 'user.name')))
         ticket.write('\n')
