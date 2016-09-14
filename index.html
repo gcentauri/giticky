@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Tickets</h2>
+
+<ul class="ticket-list"> 
+  {% for page in pages %}
+  <li><a href="{{ url_for('page', path=page.path) }}">
+      {{ page.path }}
+    </a>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}

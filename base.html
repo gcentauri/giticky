@@ -1,0 +1,16 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Gitick! - git yr dumb tickets!</title>
+</head>
+<body>
+    <a href="{{ url_for("index") }}">Top</a>
+    <div class="{% block content_class %}container{% endblock content_class %}">
+      <div class="content" role="main">
+	{% block content %}{% endblock %}
+      </div>
+      
+    </div><!-- end container -->
+</body>
+</html>
