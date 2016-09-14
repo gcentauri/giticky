@@ -16,6 +16,7 @@ def new():
 def home():
     with open( '.gitick', 'r' ) as f:
         l = f.read()
+        f.close()
         return l.rstrip()
         
 def add():
@@ -41,6 +42,21 @@ def add():
 
     sh.cd(curdir)
         
-                     
+def user():
+    curdir = str(sh.pwd()).rstrip()
+    sh.cd( home() )
 
-        
+    name = input( 'New user name: ' )
+    sh.mkdir( name )
+    sh.cd(name)
+    sh.mkdir('in-progress', 'need-info', 'test')
+    sh.echo( '../..', _out='in-progress/.gitick' )
+    sh.echo( '../..', _out='need-info/.gitick' )
+    sh.echo( '../..', _out='test/.gitick' )
+
+    sh.git('add', '.')
+    sh.git('commit', '-m', str("adding user " + name))
+
+    sh.cd(curdir)
+    
+    
