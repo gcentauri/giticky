@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Tickets Tagged {{tagged.tag}}</h2>
+
+<ul class="ticket-list"> 
+  {% for path in tagged.paths %}
+  <li><a href="{{ path }}">
+      {{ path.split('/')[-1] }}
+    </a>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}

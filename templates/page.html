@@ -1,8 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
-  {% for m in page.meta %}
-    <p><b>{{ m }}:</b> {{ page[m] }}</p>
+{% for m in page.meta %}
+{% if m == 'tags' %}
+<p><b>tags:</b>
+{% for t in page['tags'].split(',') %}
+ <a href='/tagged/{{t.strip()}}'> {{t}} </a> |
+ {% endfor %}
+  </p>
+{% else %}
+<p><b>{{ m }}:</b> {{ page[m] }}</p>
+
+{% endif %}
   {% endfor %}
   {{ page.html|safe }}
 {% endblock %}
