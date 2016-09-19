@@ -1,0 +1,24 @@
+  body {
+  width: 900px;
+  margin-left: 10%;
+  }
+a:visited{
+  color:gray;
+}
+a{
+  text-decoration:none;
+  color:teal;
+}
+
+a:hover{
+  color:orange;
+}
+
+  ul.ticket-list {
+    list-style:none;
+  }
+
+  .ticket-list > li {
+    padding: 2px;
+
+  }

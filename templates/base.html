@@ -3,22 +3,8 @@
 <head>
     <meta charset="utf-8">
     <title>Gitick! - git yr dumb tickets!</title>
-    <style type='text/css'>
-      body {
-      width: 900px;
-      margin-left: 10%;
-      }
 
-      ul.ticket-list {
-        list-style:none;
-      }
-      
-      .ticket-list > li {
-        padding: 2px;
-      }
-
-    </style>
-
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
 
 </head>
 <body>
@@ -27,7 +13,7 @@
       <div class="content" role="main">
 	{% block content %}{% endblock %}
       </div>
-      
+
     </div><!-- end container -->
 </body>
 </html>
