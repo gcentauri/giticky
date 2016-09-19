@@ -1,5 +1,4 @@
 venv/
-gitick-projects/
 __pycache__/
 *~
-gitick.test/
+tickets/

@@ -9,7 +9,7 @@ import re
 DEBUG = True
 FLATPAGES_AUTO_RELOAD = DEBUG
 FLATPAGES_EXTENSION = '.md'
-FLATPAGES_ROOT = '.'
+FLATPAGES_ROOT = 'tickets'
 TAG_DICT = defaultdict(list)
 
 IS_MD_FILE = re.compile('\.md$')
