@@ -42,7 +42,15 @@ def index():
 @app.route('/<path:path>/')
 def page(path):
     page = pages.get_or_404(path)
-    return render_template('page.html', page=page)
+    tags = tagList(page['tags'])
+    priority = int(page['priority'])
+    return render_template('ticket.html', page=page, tags=tags, priority=priority)
+
+## tags is either a list of tags or a string of comma separated tags
+def tagList(tags):
+    if type(tags) is str:
+        return tags.split(',')
+    else: return tags            
 
 @app.route('/tagged/<tag>/')
 def tagged(tag):
@@ -50,7 +58,6 @@ def tagged(tag):
     tagged = {'tag' : tag, 'paths' : TAG_DICT[tag]}
     
     return render_template('tagged.html', tagged=tagged)
-
 
 if __name__ == '__main__':
     init_tag_dict()

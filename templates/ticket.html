@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <p>
+    <b>reported by:</b> {{ page['reported'] }} </br>
+    <b>at the time:</b> {{ page['date'] }} </br>
+    {% if priority >= 7 %}
+      <b>priority:</b> <b style="color: red"> {{ page['priority'] }}</b></br>
+    {% else %}
+      <b>priority:</b> {{ page['priority'] }} </br>
+    {% endif %}
+    <b>tags:</b>
+    {% if tags %}
+      {% for t in tags %}
+	<a href='/tagged/{{t}}'> {{t}} </a> |
+      {% endfor %}
+    {% endif %}
+  </p>
+  {{ page.html|safe }}
+{% endblock %}
