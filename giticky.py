@@ -10,7 +10,7 @@ import re
 DEBUG = True
 FLATPAGES_AUTO_RELOAD = DEBUG
 FLATPAGES_EXTENSION = '.md'
-FLATPAGES_ROOT = '/home/third/projects/gitick.wwb/' #tickets
+FLATPAGES_ROOT = 'tickets'
 TAG_DICT = defaultdict(list)
 USER_DICT = defaultdict(list)
 
