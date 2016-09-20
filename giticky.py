@@ -1,7 +1,8 @@
 from flask import Flask, render_template
 from flask_flatpages import FlatPages
 from collections import defaultdict
-from os import walk
+from os import walk, listdir
+from os.path import isdir, isfile
 import re
 
 
@@ -9,26 +10,39 @@ import re
 DEBUG = True
 FLATPAGES_AUTO_RELOAD = DEBUG
 FLATPAGES_EXTENSION = '.md'
-FLATPAGES_ROOT = 'tickets'
+FLATPAGES_ROOT = '/home/third/projects/gitick.wwb/' #tickets
 TAG_DICT = defaultdict(list)
+USER_DICT = defaultdict(list)
 
 IS_MD_FILE = re.compile('\.md$')
 
-def init_tag_dict():
+def fill_tags(fname):
+    path_name = fname.replace(FLATPAGES_ROOT,'/')[1:-3]     # used for the url
+    for l in open(fname,'r'):
+        if 'tags:' == l[:5]:
+            if len(l) > 5:
+                for t in l[5:].strip().replace('[','').replace(']','').split(','):
+                    if t != '':
+                        TAG_DICT[t.strip().lower()].append(path_name)
+
+
+def collect_user( userdirs, fname):
+    for user in userdirs:
+        if fname.find(user + '/') > -1:
+            USER_DICT[user].append(fname.replace(FLATPAGES_ROOT,'/')[1:-3])
+        
+def init_dicts():
     touched = {}
+    userdirs = [x for x in listdir(FLATPAGES_ROOT)
+                if isdir(FLATPAGES_ROOT + x) and isfile( FLATPAGES_ROOT + x + '/.gitick')]
 
     for (dn,_,fl) in walk(FLATPAGES_ROOT):
         for f in fl:
             fname = dn + '/' + f
             if ((not touched.get(fname) and IS_MD_FILE.search(fname))):
                 touched[fname] = True
-                path_name = fname[1:-3]
-                for l in open(fname,'r'):
-                    if 'tags:' == l[:5]:
-                        if len(l) > 5:
-                            for t in l[5:].split(','):
-                                TAG_DICT[t.strip().lower()].append(path_name)
-
+                fill_tags( fname )
+                collect_user( userdirs, fname )
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -36,7 +50,15 @@ pages = FlatPages(app)
 
 @app.route('/')
 def index():
-    data = {'pages':pages, 'tags': list(TAG_DICT.keys())}
+    tags = list(TAG_DICT.keys())
+    tags.sort()
+    users = list(USER_DICT.keys())
+    users.sort()
+    data = {
+        'pages':pages,
+        'tags': tags,
+        'users' : users
+    }
     return render_template('index.html', data=data)  
 
 @app.route('/<path:path>/')
@@ -54,13 +76,21 @@ def tagList(tags):
 
 @app.route('/tagged/<tag>/')
 def tagged(tag):
-    print("got tag: " + tag)
-    tagged = {'tag' : tag, 'paths' : TAG_DICT[tag]}
+    paths = TAG_DICT[tag]
+    paths.sort()
+    tagged = {'tag' : tag, 'paths' :paths}
     
     return render_template('tagged.html', tagged=tagged)
 
+@app.route('/user/<user>/')
+def user(user):
+    paths = USER_DICT[user]
+    paths.sort()
+    assigned = {'user' : user, 'paths' : paths}
+    return render_template('user.html', assigned=assigned)
+
+
 if __name__ == '__main__':
-    init_tag_dict()
-    print(TAG_DICT)
+    init_dicts()
     app.run(port=8000)
     

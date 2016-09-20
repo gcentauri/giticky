@@ -23,7 +23,7 @@ def add():
     curdir = str(sh.pwd()).rstrip()
     sh.cd( home() )
     title = input( 'New ticket name: ' )
-    ticket_file = ( 'new/' + title + '.md' )
+    ticket_file = ( 'new/' + title.replace(' ','-') + '.md' )
     priority = str( 'priority: ' + input('Priority: ') )
     tags = str('tags: ' + input('Tags (separate by commas): '))
     

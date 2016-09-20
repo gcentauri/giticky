@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Tickets Tagged {{tagged.tag}}</h2>
+<h2>Tickets Assigned To {{assigned.user}}</h2>
 
 <ul class="ticket-list"> 
-  {% for path in tagged.paths %}
+  {% for path in assigned.paths %}
   <li><a href="/{{ path }}">
       {{ path.split('/')[-1] }}
     </a>
