@@ -2,19 +2,19 @@
 
 {% block content %}
   <p>
-    <b>reported by:</b> {{ page['reported'] }} </br>
-    <b>at the time:</b> {{ page['date'] }} </br>
-    {% if priority >= 7 %}
-      <b>priority:</b> <b style="color: red"> {{ page['priority'] }}</b></br>
+    <b>reported by:</b> {{ data.ticket['reported'] }} </br>
+    <b>at the time:</b> {{ data.ticket['date'] }} </br>
+    {% if data.priority >= 7 %}
+      <b>priority:</b> <b style="color: red"> {{ data.ticket['priority'] }}</b></br>
     {% else %}
-      <b>priority:</b> {{ page['priority'] }} </br>
+      <b>priority:</b> {{ data.ticket['priority'] }} </br>
     {% endif %}
     <b>tags:</b>
-    {% if tags %}
-      {% for t in tags %}
+    {% if data.tags %}
+      {% for t in data.tags %}
 	<a href='/tagged/{{t}}'> {{t}} </a> |
       {% endfor %}
     {% endif %}
   </p>
-  {{ page.html|safe }}
+  {{ data.ticket.html|safe }}
 {% endblock %}

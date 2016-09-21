@@ -21,9 +21,9 @@
 <h2>Tickets</h2>
 
 <ul class="ticket-list"> 
-  {% for page in data.pages %}
-  <li><a href="{{ url_for('page', path=page.path) }}">
-      {{ page.path }}
+  {% for ticket in data.tickets %}
+  <li><a href="{{ url_for('ticket', path=ticket.path) }}">
+      {{ ticket.path }}
     </a>
   </li>
   {% endfor %}
