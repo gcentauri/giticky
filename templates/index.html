@@ -20,6 +20,18 @@
 
 <h2>Tickets</h2>
 
+<h3>New</h3>
+<ul class="ticket-list">
+  {% for ticket in data.new %}
+    <li><a href="{{ url_for('ticket', path=ticket.path) }}">
+	{{ ticket.path }}
+      </a>
+    </li>
+  {% endfor %}
+</ul>
+
+<h3>other</h3>
+
 <ul class="ticket-list"> 
   {% for ticket in data.tickets %}
   <li><a href="{{ url_for('ticket', path=ticket.path) }}">

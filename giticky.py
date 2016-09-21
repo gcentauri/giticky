@@ -29,16 +29,6 @@ def fill_tags(fname):
                     if t != '':
                         TAG_DICT[t.strip().lower()].append(path_name)
 
-
-## tagList is used in the case that page['tags'] is a string
-## it removes excess whitespace and makes the tag lowercase to avoid duplicates
-## tagList: (U str list) -> list
-def tagList(tags):
-    if type(tags) is str:
-        taglist = tags.split(',')
-        return [tag.strip().lower() for tag in taglist]
-    else: return [t.strip().lower() for t in tags]
-    
 def collect_user( userdirs, fname):
     for user in userdirs:
         if fname.find(user + '/') > -1:
@@ -57,6 +47,18 @@ def init_dicts():
                 fill_tags( fname )
                 collect_user( userdirs, fname )
 
+## tagList is used in the case that page['tags'] is a string
+## it removes excess whitespace and makes the tag lowercase to avoid duplicates
+## tagList: (U str list) -> list
+def tagList(tags):
+    if type(tags) is str:
+        taglist = tags.split(',')
+        return [tag.strip().lower() for tag in taglist]
+    else: return [t.strip().lower() for t in tags]
+    
+ticket_paths = [ticket.path for ticket in tickets]
+new_tickets = [ticket for ticket in tickets if ticket.path[:4] == 'new/']
+
 @app.route('/')
 def index():
     tags = list(TAG_DICT.keys())
@@ -66,7 +68,8 @@ def index():
     data = {
         'tickets':tickets,
         'tags': tags,
-        'users' : users
+        'users' : users,
+        'new' : new_tickets
     }
     return render_template('index.html', data=data)  
 
