@@ -28,10 +28,14 @@ def fill_tags(fname):
                 for t in l[5:].strip().replace('[','').replace(']','').split(','):
                     if t != '':
                         TAG_DICT[t.strip().lower()].append(path_name)
-                        
+
+
+## tagList is used in the case that page['tags'] is a string
+## tagList: (U str list) -> list
 def tagList(tags):
     if type(tags) is str:
-        return tags.split(',')
+        taglist = tags.split(',')
+        return [tag.strip().lower() for tag in taglist]
     else: return tags            
 
 def collect_user( userdirs, fname):
