@@ -10,11 +10,15 @@ import re
 DEBUG = True
 FLATPAGES_AUTO_RELOAD = DEBUG
 FLATPAGES_EXTENSION = '.md'
-FLATPAGES_ROOT = 'tickets'
+FLATPAGES_ROOT = '/home/grant/programming/gitick-projects'
 TAG_DICT = defaultdict(list)
 USER_DICT = defaultdict(list)
 
 IS_MD_FILE = re.compile('\.md$')
+
+app = Flask(__name__)
+app.config.from_object(__name__)
+pages = FlatPages(app)
 
 def fill_tags(fname):
     path_name = fname.replace(FLATPAGES_ROOT,'/')[1:-3]     # used for the url
@@ -24,7 +28,11 @@ def fill_tags(fname):
                 for t in l[5:].strip().replace('[','').replace(']','').split(','):
                     if t != '':
                         TAG_DICT[t.strip().lower()].append(path_name)
-
+                        
+def tagList(tags):
+    if type(tags) is str:
+        return tags.split(',')
+    else: return tags            
 
 def collect_user( userdirs, fname):
     for user in userdirs:
@@ -43,10 +51,6 @@ def init_dicts():
                 touched[fname] = True
                 fill_tags( fname )
                 collect_user( userdirs, fname )
-
-app = Flask(__name__)
-app.config.from_object(__name__)
-pages = FlatPages(app)
 
 @app.route('/')
 def index():
@@ -69,10 +73,6 @@ def page(path):
     return render_template('ticket.html', page=page, tags=tags, priority=priority)
 
 ## tags is either a list of tags or a string of comma separated tags
-def tagList(tags):
-    if type(tags) is str:
-        return tags.split(',')
-    else: return tags            
 
 @app.route('/tagged/<tag>/')
 def tagged(tag):
