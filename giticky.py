@@ -10,7 +10,7 @@ import re
 DEBUG = True
 FLATPAGES_AUTO_RELOAD = DEBUG
 FLATPAGES_EXTENSION = '.md'
-FLATPAGES_ROOT = '/home/grant/programming/gitick-projects'
+FLATPAGES_ROOT = '/home/grant/programming/gitick-projects/wwb.gitick'
 TAG_DICT = defaultdict(list)
 USER_DICT = defaultdict(list)
 
@@ -18,7 +18,7 @@ IS_MD_FILE = re.compile('\.md$')
 
 app = Flask(__name__)
 app.config.from_object(__name__)
-pages = FlatPages(app)
+tickets = FlatPages(app)
 
 def fill_tags(fname):
     path_name = fname.replace(FLATPAGES_ROOT,'/')[1:-3]     # used for the url
@@ -64,18 +64,23 @@ def index():
     users = list(USER_DICT.keys())
     users.sort()
     data = {
-        'pages':pages,
+        'tickets':tickets,
         'tags': tags,
         'users' : users
     }
     return render_template('index.html', data=data)  
 
 @app.route('/<path:path>/')
-def page(path):
-    page = pages.get_or_404(path)
-    tags = tagList(page['tags'])
-    priority = int(page['priority'])
-    return render_template('ticket.html', page=page, tags=tags, priority=priority)
+def ticket(path):
+    ticket = tickets.get_or_404(path)
+    tags = tagList(ticket['tags'])
+    priority = int(ticket['priority'])
+    data = {
+        'ticket': ticket,
+        'tags': tags,
+        'priority': priority
+    }
+    return render_template('ticket.html', data=data)
 
 ## tags is either a list of tags or a string of comma separated tags
 
@@ -97,5 +102,5 @@ def user(user):
 
 if __name__ == '__main__':
     init_dicts()
-    app.run(port=8000)
+    app.run(host='192.168.2.6', port=8000)
     
