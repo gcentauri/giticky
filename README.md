@@ -1,6 +1,8 @@
 # giticky
 A dumb git and filesystem based ticket system with a browser interface in Python Flask
 
+for some reason my earlier commits were credited as budisaga or whatev
+
 ## gitick.py
 this script will be used to generate and manage new projects, tickets, users,
 and other git commands.  for now, you can launch it with python3 and use the
