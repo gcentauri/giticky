@@ -123,5 +123,5 @@ def user(user):
 
 if __name__ == '__main__':
     init_dicts()
-    app.run(host='192.168.2.6', port=8000)
+    app.run(port=8000)
     
