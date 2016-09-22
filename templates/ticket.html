@@ -12,7 +12,7 @@
     <b>tags:</b>
     {% if tags %}
       {% for t in tags %}
-	<a href='/tagged/{{t}}'> {{t}} </a> |
+	<a href='/tagged/{{t.strip()}}'> {{t}} </a> |
       {% endfor %}
     {% endif %}
   </p>
