@@ -18,7 +18,7 @@ IS_MD_FILE = re.compile('\.md$')
 
 app = Flask(__name__)
 app.config.from_object(__name__)
-tickets = FlatPages(app)
+tickets = FlatPages(app) #this is a flatpages.pages object, a collection of page(s)
 
 def fill_tags(fname):
     path_name = fname.replace(FLATPAGES_ROOT,'/')[1:-3]     # used for the url
@@ -56,20 +56,38 @@ def tagList(tags):
         return [tag.strip().lower() for tag in taglist]
     else: return [t.strip().lower() for t in tags]
     
-ticket_paths = [ticket.path for ticket in tickets]
-new_tickets = [ticket for ticket in tickets if ticket.path[:4] == 'new/']
+ticket_paths = [ticket.path for ticket in tickets] #list of strings
+ticket_paths.sort()
+topdirs = [d for d in listdir(FLATPAGES_ROOT) if d[0] != '.'] 
+
+## lod is a list of directories (strings) tickets is a flatpages.pages object
+## returns a dict of directory : list of tickets (tickets are page objects)
+def project_index(lod, tickets):
+    index_dict = defaultdict(list)
+    for d in lod:
+        [index_dict[d].append(t) for t in tickets if t.path[:len(d)] == d]
+    return index_dict
+
+## like the above function except just uses paths instead of tickets
+## using paths seems to be fine, because in the templates you can use the
+## url_for('ticket', path=ticket_path) to generate links to the pages themselves
+def project_index_paths(lod, t_paths):
+    index_dict = defaultdict(list)
+    for d in lod:
+        [index_dict[d].append(t) for t in t_paths if t[:len(d)] == d]
+    return index_dict
+
+INDEX_DICT = project_index_paths(topdirs, ticket_paths)
 
 @app.route('/')
 def index():
     tags = list(TAG_DICT.keys())
     tags.sort()
-    users = list(USER_DICT.keys())
-    users.sort()
+    subdirs = list(INDEX_DICT.keys())    
     data = {
-        'tickets':tickets,
+        'tickets': INDEX_DICT,
         'tags': tags,
-        'users' : users,
-        'new' : new_tickets
+        'subdirs' : subdirs,
     }
     return render_template('index.html', data=data)  
 

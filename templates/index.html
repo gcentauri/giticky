@@ -1,15 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
 
-<!-- <h3>Users</h3> -->
-<!-- <p> -->
-<!--   {% for user in data.users %} -->
-<!--   <a href="/user/{{user}}/"> |{{user}}|</a>  -->
-<!--   {% endfor %} -->
-<!-- </p> -->
-
-
-
 <h3> Tags </h3>
 <p>
 {% for tag in data.tags %}
@@ -17,29 +8,41 @@
 {% endfor %}
 </p>
 
-
 <h2>Tickets</h2>
 
-<h3>New</h3>
-<ul class="ticket-list">
-  {% for ticket in data.new %}
-    <li><a href="{{ url_for('ticket', path=ticket.path) }}">
-	{{ ticket.path }}
-      </a>
-    </li>
-  {% endfor %}
-</ul>
+{% for subdir in data.subdirs %}
+  <h3>{{ subdir }}</h3>
+  <ul class="ticket-list">
+    {% for ticket in data.tickets[subdir] %}
+      <li>
+	<a href="{{ url_for('ticket', path=ticket) }}">
+	  {{ ticket }}
+	</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endfor %}
 
-<h3>other</h3>
+{# <h3>New</h3> #}
+{# <ul class="ticket-list"> #}
+{#   {% for ticket in data.new %} #}
+{#     <li><a href="{{ url_for('ticket', path=ticket.path) }}"> #}
+{# 	{{ ticket.path }} #}
+{#       </a> #}
+{#     </li> #}
+{#   {% endfor %} #}
+{# </ul> #}
 
-<ul class="ticket-list"> 
-  {% for ticket in data.tickets %}
-  <li><a href="{{ url_for('ticket', path=ticket.path) }}">
-      {{ ticket.path }}
-    </a>
-  </li>
-  {% endfor %}
-</ul>
+{# <h3>other</h3> #}
+
+{# <ul class="ticket-list">  #}
+{#   {% for ticket in data.tickets %} #}
+{#   <li><a href="{{ url_for('ticket', path=ticket.path) }}"> #}
+{#       {{ ticket.path }} #}
+{#     </a> #}
+{#   </li> #}
+{#   {% endfor %} #}
+{# </ul> #}
 
 
 
