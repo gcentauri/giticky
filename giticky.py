@@ -12,14 +12,14 @@ FLATPAGES_AUTO_RELOAD = DEBUG
 FLATPAGES_EXTENSION = '.md'
 FLATPAGES_ROOT = '/home/third/projects/gitick.wwb'
 TAG_DICT = defaultdict(list)
-USER_DICT = defaultdict(list)
+
 
 
 IS_MD_FILE = re.compile('\.md$')
 
 app = Flask(__name__)
 app.config.from_object(__name__)
-tickets = FlatPages(app) #this is a flatpages.pages object, a collection of page(s)
+TICKETS = FlatPages(app) #this is a flatpages.pages object, a collection of page(s)
 
 
 ## tag_list is used in the case that page['tags'] is a string
@@ -35,9 +35,9 @@ def tag_list(tags):
     else: return []
     
     
-ticket_paths = [ticket.path for ticket in tickets] #list of strings
-ticket_paths.sort()
-topdirs = [d for d in listdir(FLATPAGES_ROOT) if d[0] != '.'] 
+TICKET_PATHS = [ticket.path for ticket in TICKETS] #list of strings
+TICKET_PATHS.sort()
+TOPDIRS = [d for d in listdir(FLATPAGES_ROOT) if d[0] != '.'] 
 
 ## lod is a list of directories (strings) tickets is a flatpages.pages object
 ## returns a dict of directory : list of tickets (tickets are page objects)
@@ -61,18 +61,16 @@ def fill_tags(ticket):
         TAG_DICT[tag].append(ticket.path)
 
 def init_dicts():
-    for ticket in tickets:
+    for ticket in TICKETS:
         fill_tags(ticket)
 
-
-
-INDEX_DICT = project_index_paths(topdirs, ticket_paths)
+INDEX_DICT = project_index_paths(TOPDIRS, TICKET_PATHS)
 
 @app.route('/')
 def index():
     tags = list(TAG_DICT.keys())
     tags.sort()
-    subdirs = list(INDEX_DICT.keys())    
+    subdirs = list(INDEX_DICT.keys())
     data = {
         'tickets': INDEX_DICT,
         'tags': tags,
@@ -82,7 +80,7 @@ def index():
 
 @app.route('/<path:path>/')
 def ticket(path):
-    ticket = tickets.get_or_404(path)
+    ticket = TICKETS.get_or_404(path)
     tags = tag_list(ticket['tags'])
     priority = int(ticket['priority'])
     data = {
@@ -102,12 +100,12 @@ def tagged(tag):
     
     return render_template('tagged.html', tagged=tagged)
 
-@app.route('/user/<user>/')
-def user(user):
-    paths = USER_DICT[user]
-    paths.sort()
-    assigned = {'user' : user, 'paths' : paths}
-    return render_template('user.html', assigned=assigned)
+# @app.route('/user/<user>/')
+# def user(user):
+#     paths = USER_DICT[user]
+#     paths.sort()
+#     assigned = {'user' : user, 'paths' : paths}
+#     return render_template('user.html', assigned=assigned)
 
 
 if __name__ == '__main__':
