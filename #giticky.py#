@@ -5,8 +5,6 @@ from os import walk, listdir
 from os.path import isdir, isfile
 import re
 
-
-
 DEBUG = True
 FLATPAGES_AUTO_RELOAD = DEBUG
 FLATPAGES_EXTENSION = '.md'

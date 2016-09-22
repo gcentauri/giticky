@@ -4,7 +4,7 @@
 
 <ul class="ticket-list"> 
   {% for path in tagged.paths %}
-  <li><a href="{{ path }}">
+  <li><a href="/{{path}}">
       {{ path.split('/')[-1] }}
     </a>
   </li>
