@@ -1,0 +1,35 @@
+ {colin/need-info => backlog}/Win-Condition-i.e.-Escape.md       | 32 +++++++++++++++-
+ {new => backlog}/need-info/Brainstorm-On-More-Content.md        | 58 ++++++++++++++++++++++++++++
+ {colin/in-progress => backlog/need-info}/Player-death.md        |  0
+ backlog/test/Better-Font-or-Fonts.md                            |  8 ++++
+ .../in-progress/Add-display-name-field-to-NameComponent-data.md | 26 +++++++++++++
+ .../in-progress/Expand-spell-language-to-grab-specific-names.md | 25 ++++++++++++
+ .../abstract-LogView-solution-into-ScrollingText-type.md        |  0
+ gitick-view.py                                                  | 59 -----------------------------
+ gitick.py                                                       | 46 ----------------------
+ grant/test/Bitfive-Backend.md                                   | 28 ++++++++++++++
+ new/Add-Rhyming-and-Rhyme-checks-to-Language-and-Game.md        |  8 ++++
+ new/Improve-Light-Sources-System.md                             |  8 ++++
+ new/Refactor-and-Modularize-Game-Generation.md                  |  8 ++++
+ new/Water-in-Areas.md                                           |  8 ++++
+ requirements.txt                                                | 21 ----------
+ templates/base.html                                             | 33 ----------------
+ templates/index.html                                            | 24 ------------
+ templates/page.html                                             | 17 ---------
+ templates/tagged.html                                           | 13 -------
+ yaml_reformat.py                                                | 29 --------------
+ 20 files changed, 208 insertions(+), 243 deletions(-)
+ rename {colin/need-info => backlog}/Win-Condition-i.e.-Escape.md (64%)
+ rename {new => backlog}/need-info/Brainstorm-On-More-Content.md (79%)
+ rename {colin/in-progress => backlog/need-info}/Player-death.md (100%)
+ create mode 100644 backlog/test/Better-Font-or-Fonts.md
+ create mode 100644 colin/in-progress/Add-display-name-field-to-NameComponent-data.md
+ create mode 100644 colin/in-progress/Expand-spell-language-to-grab-specific-names.md
+ rename {new => colin/in-progress}/abstract-LogView-solution-into-ScrollingText-type.md (100%)
+ delete mode 100644 gitick-view.py
+ delete mode 100644 gitick.py
+ create mode 100644 grant/test/Bitfive-Backend.md
+ create mode 100644 new/Add-Rhyming-and-Rhyme-checks-to-Language-and-Game.md
+ create mode 100644 new/Improve-Light-Sources-System.md
+ create mode 100644 new/Refactor-and-Modularize-Game-Generation.md
+ create mode 100644 new/Water-in-Areas.md
