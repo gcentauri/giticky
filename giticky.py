@@ -10,55 +10,34 @@ import re
 DEBUG = True
 FLATPAGES_AUTO_RELOAD = DEBUG
 FLATPAGES_EXTENSION = '.md'
-FLATPAGES_ROOT = '/home/grant/programming/gitick-projects/wwb.gitick'
+FLATPAGES_ROOT = '/home/third/projects/gitick.wwb'
 TAG_DICT = defaultdict(list)
-USER_DICT = defaultdict(list)
+
+
 
 IS_MD_FILE = re.compile('\.md$')
 
 app = Flask(__name__)
 app.config.from_object(__name__)
-tickets = FlatPages(app) #this is a flatpages.pages object, a collection of page(s)
+TICKETS = FlatPages(app) #this is a flatpages.pages object, a collection of page(s)
 
-def fill_tags(fname):
-    path_name = fname.replace(FLATPAGES_ROOT,'/')[1:-3]     # used for the url
-    for l in open(fname,'r'):
-        if 'tags:' == l[:5]:
-            if len(l) > 5:
-                for t in l[5:].strip().replace('[','').replace(']','').split(','):
-                    if t != '':
-                        TAG_DICT[t.strip().lower()].append(path_name)
 
-def collect_user( userdirs, fname):
-    for user in userdirs:
-        if fname.find(user + '/') > -1:
-            USER_DICT[user].append(fname.replace(FLATPAGES_ROOT,'/')[1:-3])
-        
-def init_dicts():
-    touched = {}
-    userdirs = [x for x in listdir(FLATPAGES_ROOT)
-                if isdir(FLATPAGES_ROOT + x) and isfile( FLATPAGES_ROOT + x + '/.gitick')]
-
-    for (dn,_,fl) in walk(FLATPAGES_ROOT):
-        for f in fl:
-            fname = dn + '/' + f
-            if ((not touched.get(fname) and IS_MD_FILE.search(fname))):
-                touched[fname] = True
-                fill_tags( fname )
-                collect_user( userdirs, fname )
-
-## tagList is used in the case that page['tags'] is a string
+## tag_list is used in the case that page['tags'] is a string
 ## it removes excess whitespace and makes the tag lowercase to avoid duplicates
-## tagList: (U str list) -> list
-def tagList(tags):
+## tag_list: (U str list) -> list
+
+def tag_list(tags):
     if type(tags) is str:
         taglist = tags.split(',')
         return [tag.strip().lower() for tag in taglist]
-    else: return [t.strip().lower() for t in tags]
+    elif type(tags) is list:
+        return [t.strip().lower() for t in tags]
+    else: return []
     
-ticket_paths = [ticket.path for ticket in tickets] #list of strings
-ticket_paths.sort()
-topdirs = [d for d in listdir(FLATPAGES_ROOT) if d[0] != '.'] 
+    
+TICKET_PATHS = [ticket.path for ticket in TICKETS] #list of strings
+TICKET_PATHS.sort()
+TOPDIRS = [d for d in listdir(FLATPAGES_ROOT) if d[0] != '.'] 
 
 ## lod is a list of directories (strings) tickets is a flatpages.pages object
 ## returns a dict of directory : list of tickets (tickets are page objects)
@@ -77,13 +56,21 @@ def project_index_paths(lod, t_paths):
         [index_dict[d].append(t) for t in t_paths if t[:len(d)] == d]
     return index_dict
 
-INDEX_DICT = project_index_paths(topdirs, ticket_paths)
+def fill_tags(ticket):
+    for tag in tag_list(ticket['tags']):
+        TAG_DICT[tag].append(ticket.path)
+
+def init_dicts():
+    for ticket in TICKETS:
+        fill_tags(ticket)
+
+INDEX_DICT = project_index_paths(TOPDIRS, TICKET_PATHS)
 
 @app.route('/')
 def index():
     tags = list(TAG_DICT.keys())
     tags.sort()
-    subdirs = list(INDEX_DICT.keys())    
+    subdirs = list(INDEX_DICT.keys())
     data = {
         'tickets': INDEX_DICT,
         'tags': tags,
@@ -93,8 +80,8 @@ def index():
 
 @app.route('/<path:path>/')
 def ticket(path):
-    ticket = tickets.get_or_404(path)
-    tags = tagList(ticket['tags'])
+    ticket = TICKETS.get_or_404(path)
+    tags = tag_list(ticket['tags'])
     priority = int(ticket['priority'])
     data = {
         'ticket': ticket,
@@ -113,12 +100,12 @@ def tagged(tag):
     
     return render_template('tagged.html', tagged=tagged)
 
-@app.route('/user/<user>/')
-def user(user):
-    paths = USER_DICT[user]
-    paths.sort()
-    assigned = {'user' : user, 'paths' : paths}
-    return render_template('user.html', assigned=assigned)
+# @app.route('/user/<user>/')
+# def user(user):
+#     paths = USER_DICT[user]
+#     paths.sort()
+#     assigned = {'user' : user, 'paths' : paths}
+#     return render_template('user.html', assigned=assigned)
 
 
 if __name__ == '__main__':
