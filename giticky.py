@@ -17,7 +17,6 @@ app.config.from_object(__name__)
 TICKETS = FlatPages(app) #this is a flatpages.pages object, a collection of page(s)
 TAG_DICT = defaultdict(list)
 
-
 ## tag_list is used in the case that page['tags'] is a string
 ## it removes excess whitespace and makes the tag lowercase to avoid duplicates
 ## tag_list: (U str list) -> list
@@ -43,6 +42,8 @@ def project_index(lod, tickets):
         [index_dict[d].append(t) for t in tickets if t.path[:len(d)] == d]
     return index_dict
 
+INDEX_DICT = project_index(TOPDIRS, TICKETS)
+
 ## like the above function except just uses paths instead of tickets
 ## using paths seems to be fine, because in the templates you can use the
 ## url_for('ticket', path=ticket_path) to generate links to the pages themselves
@@ -52,6 +53,8 @@ def project_index_paths(lod, t_paths):
         [index_dict[d].append(t) for t in t_paths if t[:len(d)] == d]
     return index_dict
 
+PATH_DICT = project_index_paths(TOPDIRS, TICKET_PATHS)
+
 def fill_tags(ticket):
     for tag in tag_list(ticket['tags']):
         TAG_DICT[tag].append(ticket.path)
@@ -60,8 +63,7 @@ def init_dicts():
     for ticket in TICKETS:
         fill_tags(ticket)
 
-INDEX_DICT = project_index_paths(TOPDIRS, TICKET_PATHS)
-
+        
 @app.route('/')
 def index():
     tags = list(TAG_DICT.keys())

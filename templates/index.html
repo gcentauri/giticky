@@ -15,8 +15,12 @@
   <ul class="ticket-list">
     {% for ticket in data.tickets[subdir] %}
       <li>
-	<a href="{{ url_for('ticket', path=ticket) }}">
-	  {{ ticket }}
+	<a href="{{ url_for('ticket', path=ticket.path) }}">
+	  {% if ticket['title'] %}
+	    {{ ticket['title'] }}
+	  {% else %}
+	    {{ ticket.path }}
+	  {% endif %}
 	</a>
       </li>
     {% endfor %}

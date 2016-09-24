@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+  {% if data.ticket.title %} <h1> {{ data.ticket.title }} </h1> {% endif %}
   <p>
     <b>reported by:</b> {{ data.ticket['reported'] }} </br>
     <b>at the time:</b> {{ data.ticket['date'] }} </br>
