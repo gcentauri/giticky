@@ -1,6 +1,12 @@
 {% extends "base.html" %}
-
 {% block content %}
+  <h4> Tags </h4>
+  <p>
+    {% for tag in data.tags %} 
+    <a href="/tagged/{{tag}}/"> |{{tag}}| </a> 
+    {% endfor %}
+  </p>
+  
   {% if data.ticket.title %} <h1> {{ data.ticket.title }} </h1> {% endif %}
   <p>
     <b>reported by:</b> {{ data.ticket['reported'] }} </br>
@@ -12,7 +18,7 @@
     {% endif %}
     <b>tags:</b>
 
-      {% for t in data.tags %}
+      {% for t in data.ticket_tags %}
 	<a href='/tagged/{{t.strip()}}'> {{t}} </a> |
 
       {% endfor %}

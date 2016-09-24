@@ -78,11 +78,14 @@ def index():
 
 @app.route('/<path:path>/')
 def ticket(path):
+    tags = list(TAG_DICT.keys())
+    tags.sort()
     ticket = TICKETS.get_or_404(path)
-    tags = tag_list(ticket['tags'])
+    ticket_tags = tag_list(ticket['tags'])
     priority = int(ticket['priority'])
     data = {
         'ticket': ticket,
+        'ticket_tags' : ticket_tags,
         'tags': tags,
         'priority': priority
     }

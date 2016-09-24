@@ -9,12 +9,12 @@
     
 </head>
 <body>
-    <a href="{{ url_for("index") }}">Top</a>
-    <div class="{% block content_class %}container{% endblock content_class %}">
-      <div class="content" role="main">
-	{% block content %}{% endblock %}
-      </div>
+  <a href="{{ url_for("index") }}">Top</a>
+  <div class="{% block content_class %}container{% endblock content_class %}">
+    <div class="content" role="main">
+      {% block content %}{% endblock %}
+    </div>
 
-    </div><!-- end container -->
+  </div><!-- end container -->
 </body>
 </html>
