@@ -5,21 +5,17 @@ from os import walk, listdir
 from os.path import isdir, isfile
 import re
 
-
-
 DEBUG = True
 FLATPAGES_AUTO_RELOAD = DEBUG
 FLATPAGES_EXTENSION = '.md'
-FLATPAGES_ROOT = '/home/third/projects/gitick.wwb'
-TAG_DICT = defaultdict(list)
-
-
+FLATPAGES_ROOT = '/home/grant/projects/gitick-projects/giticky.gitick'
 
 IS_MD_FILE = re.compile('\.md$')
 
 app = Flask(__name__)
 app.config.from_object(__name__)
 TICKETS = FlatPages(app) #this is a flatpages.pages object, a collection of page(s)
+TAG_DICT = defaultdict(list)
 
 
 ## tag_list is used in the case that page['tags'] is a string
