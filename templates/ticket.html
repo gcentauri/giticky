@@ -11,12 +11,11 @@
     {% endif %}
     <b>tags:</b>
 
-    {% if tags %}
-      {% for t in tags %}
+      {% for t in data.tags %}
 	<a href='/tagged/{{t.strip()}}'> {{t}} </a> |
 
       {% endfor %}
-    {% endif %}
+
   </p>
   {{ data.ticket.html|safe }}
 {% endblock %}
