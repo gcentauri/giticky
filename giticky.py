@@ -8,7 +8,8 @@ import re
 DEBUG = True
 FLATPAGES_AUTO_RELOAD = DEBUG
 FLATPAGES_EXTENSION = '.md'
-FLATPAGES_ROOT = '/home/grant/projects/gitick-projects/giticky.gitick'
+FLATPAGES_ROOT = '/home/grant/projects/gitick-projects/'
+PROJECTS_HOME = '/home/grant/projects/gitick-projects/'
 
 IS_MD_FILE = re.compile('\.md$')
 
@@ -28,12 +29,13 @@ def tag_list(tags):
     elif type(tags) is list:
         return [t.strip().lower() for t in tags]
     else: return []
-    
-    
-TICKET_PATHS = [ticket.path for ticket in TICKETS] #list of strings
-TICKET_PATHS.sort()
-TOPDIRS = [d for d in listdir(FLATPAGES_ROOT) if d[0] != '.'] 
 
+## utility function for filtering out dotfiles
+def not_dot(f):
+    if f[0] != '.':
+        return True
+    else: return False    
+    
 ## lod is a list of directories (strings) tickets is a flatpages.pages object
 ## returns a dict of directory : list of tickets (tickets are page objects)
 def project_index(lod, tickets):
@@ -42,18 +44,23 @@ def project_index(lod, tickets):
         [index_dict[d].append(t) for t in tickets if t.path[:len(d)] == d]
     return index_dict
 
-INDEX_DICT = project_index(TOPDIRS, TICKETS)
+## like above but project is a list of tickets returned by PROJ_DICT['key']
+def ticket_index(lod, project):
+    index_dict = defaultdict(list)
+    tickets = PROJ_INDEX[project]
+    for d in lod:
+        [index_dict[d].append(t) for t in tickets if t.path.strip(project + '/')[:len(d)] == d]
+    return index_dict
+
 
 ## like the above function except just uses paths instead of tickets
 ## using paths seems to be fine, because in the templates you can use the
 ## url_for('ticket', path=ticket_path) to generate links to the pages themselves
-def project_index_paths(lod, t_paths):
-    index_dict = defaultdict(list)
+def project_paths(lod, t_paths):
+    path_dict = defaultdict(list)
     for d in lod:
-        [index_dict[d].append(t) for t in t_paths if t[:len(d)] == d]
-    return index_dict
-
-PATH_DICT = project_index_paths(TOPDIRS, TICKET_PATHS)
+        [path_dict[d].append(t) for t in t_paths if t[:len(d)] == d]
+    return path_dict
 
 def fill_tags(ticket):
     for tag in tag_list(ticket['tags']):
@@ -61,7 +68,13 @@ def fill_tags(ticket):
 
 def init_dicts():
     for ticket in TICKETS:
-        fill_tags(ticket)
+        fill_tags(ticket)        
+        
+TICKET_PATHS = [ticket.path for ticket in TICKETS] #list of strings
+TICKET_PATHS.sort()
+PROJ_DIRS = [d for d in listdir(FLATPAGES_ROOT) if not_dot(d)] 
+PROJ_INDEX = project_index(PROJ_DIRS, TICKETS)
+
 
         
 @app.route('/')
