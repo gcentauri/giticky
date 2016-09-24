@@ -11,11 +11,12 @@
       <b>priority:</b> {{ data.ticket['priority'] }} </br>
     {% endif %}
     <b>tags:</b>
-    {% if data.tags %}
+
       {% for t in data.tags %}
-	<a href='/tagged/{{t}}'> {{t}} </a> |
+	<a href='/tagged/{{t.strip()}}'> {{t}} </a> |
+
       {% endfor %}
-    {% endif %}
+
   </p>
   {{ data.ticket.html|safe }}
 {% endblock %}
