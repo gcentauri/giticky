@@ -1,18 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
-  <h4> Tags </h4>
-  <p>
-    {% for tag in data.tags %} 
-    <a href="/tagged/{{tag}}/"> |{{tag}}| </a> 
-    {% endfor %}
-  </p>
 
-<h2>Tickets</h2>
-
-{% for subdir in data.subdirs %}
-  <h3>{{ subdir }}</h3>
-  <ul class="ticket-list">
-    {% for ticket in data.tickets[subdir] %}
+  <h2>Tickets</h2>
+  
+  {% for ticket in tickets %}
+    <ul class="ticket-list">
       <li>
 	<a href="{{ url_for('ticket', path=ticket.path) }}">
 	  {% if ticket['title'] %}
@@ -22,9 +14,8 @@
 	  {% endif %}
 	</a>
       </li>
-    {% endfor %}
-  </ul>
-{% endfor %}
+    </ul>
+  {% endfor %}
 
 {# <h3>New</h3> #}
 {# <ul class="ticket-list"> #}

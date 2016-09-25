@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block content %}
+  {% for p in projects %}
+    <h4><a href="/{{ p }}">{{p}}</a></h4>
+  {% endfor %}
+{% endblock %}
