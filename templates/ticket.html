@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
-  <h4> Tags </h4>
-  <p>
-    {% for tag in data.tags %} 
-    <a href="/tagged/{{tag}}/"> |{{tag}}| </a> 
-    {% endfor %}
-  </p>
+  {# <h4> Tags </h4> #}
+  {# <p> #}
+  {#   {% for tag in data.tags %}  #}
+  {#   <a href="/tagged/{{tag}}/"> |{{tag}}| </a>  #}
+  {#   {% endfor %} #}
+  {# </p> #}
   
   {% if data.ticket.title %} <h1> {{ data.ticket.title }} </h1> {% endif %}
   <p>
@@ -16,13 +16,11 @@
     {% else %}
       <b>priority:</b> {{ data.ticket['priority'] }} </br>
     {% endif %}
-    <b>tags:</b>
+    <b>tags:</b> 
 
-      {% for t in data.ticket_tags %}
-	<a href='/tagged/{{t.strip()}}'> {{t}} </a> |
-
+      {% for t in data.ticket_tags %} 
+    	<a href='/tagged/{{t.strip()}}'> {{t}} </a> | 
       {% endfor %}
-
   </p>
   {{ data.ticket.html|safe }}
 {% endblock %}

@@ -2,18 +2,20 @@
 {% block content %}
 
   <h2>Tickets</h2>
-  
-  {% for ticket in tickets %}
+  {% for d in subdirs %}
+    <h3>{{ d }}</h3>
     <ul class="ticket-list">
-      <li>
-	<a href="{{ url_for('ticket', path=ticket.path) }}">
-	  {% if ticket['title'] %}
-	    {{ ticket['title'] }}
-	  {% else %}
-	    {{ ticket.path }}
-	  {% endif %}
-	</a>
-      </li>
+      {% for ticket in ticket_index[d] %}
+	<li>
+	  <a href="{{ url_for('ticket', path=ticket.path, project=project) }}">
+	    {% if ticket['title'] %}
+	      {{ ticket['title'] }}
+	    {% else %}
+	      {{ ticket.path }}
+	    {% endif %}
+	  </a>
+	</li>
+      {% endfor %}
     </ul>
   {% endfor %}
 

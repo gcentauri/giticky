@@ -66,19 +66,19 @@ def top():
 @app.route('/<project>')
 def index(project):
     tickets = init_tickets_for(project)
-    return render_template('index.html', tickets=tickets)  
+    subdirs = get_subdirs(tickets.root)
+    ticket_index = project_index(subdirs, tickets)
+    return render_template('index.html', ticket_index=ticket_index, project=project, subdirs=subdirs)  
 
-@app.route('/<path:path>/')
-def ticket(path):
-    tags = list(TAG_DICT.keys())
-    tags.sort()
-    ticket = TICKETS.get_or_404(path)
-    ticket_tags = tag_list(ticket['tags'])
+@app.route('/<project>/<path:path>/')
+def ticket(path, project):
+    tickets = init_tickets_for(project)
+    ticket = tickets.get_or_404(path)
     priority = int(ticket['priority'])
+    ticket_tags = tag_list(ticket['tags'])
     data = {
         'ticket': ticket,
-        'ticket_tags' : ticket_tags,
-        'tags': tags,
+        'ticket_tags': ticket_tags,
         'priority': priority
     }
     return render_template('ticket.html', data=data)
