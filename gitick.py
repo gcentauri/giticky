@@ -20,15 +20,23 @@ class Ticket:
     
         
 class Gitick:
+
     '''
     A Gitick object represents a git repository full of markdown
     files that are Tickets.  
     '''
-    tickets = []
+    
+    root = Path # pathlib Path object
+    tickets = [] # list of Paths
+    users = [] # list of Paths
     
     def __init__(self, path):
-        self.root = Path(path)
-        self.tickets = sorted(self.root.glob('**/*.md'))
+        self.root = Path(path).absolute()
+        if self.root.exists():
+            self.tickets = sorted(self.root.glob('**/*.md'))
+        else:
+            self.new()
+        self._home()
         
     def __len__(self):
         return len(self.tickets)
@@ -36,6 +44,29 @@ class Gitick:
     def __getitem__(self, position):
         return self.tickets[position]
 
+    def _home(self):
+        sh.cd(self.root.as_posix())
+    
+    def new(self):
+        newdirs = [self.root / x for x in ['new',
+                                           'new/need-info',
+                                           'backlog',
+                                           'tested']]
+        
+        self.root.mkdir()
+        for d in newdirs:
+            d.mkdir()
+
+        sh.cd(self.root.as_posix())
+        sh.echo( '.', _out='.gitick' )
+        sh.echo( '..', _out='new/.gitick' )
+        sh.echo( '../..', _out='new/need-info/.gitick' )
+
+        sh.git( 'init', '.' )
+        sh.git( 'add', '.' )
+        sh.git( 'commit', '-m', str("initial commit for " + self.root.name) )
+
+    
     def add_ticket(self, title, priority, tags):
         '''
         title is a string
@@ -64,6 +95,23 @@ class Gitick:
         self.tickets = sorted(self.tickets + [Path(self.root, ticket_file)])
         sh.cd(curdir)
 
+    def user_create(self, name):
+        newdirs = [Path(name)] + [Path(name) / x for x in ['in-progress',
+                                                           'need-info',
+                                                           'test']]
+        for d in newdirs:
+            d.mkdir()
+
+        sh.echo( '../..', _out=name + '/in-progress/.gitick' )
+        sh.echo( '../..', _out=name + '/need-info/.gitick' )
+        sh.echo( '../..', _out=name + '/test/.gitick' )
+        
+        sh.git('add', '.')
+        sh.git('commit', '-m', str("adding user " + name))
+
+        self.users = self.users = [Path(name)]
+
+
     # allows tof get in-progress, testing, need-info (must have tix directly
     # under parent tho)
     def get_tickets_from_parent( self, parent ):
@@ -72,9 +120,11 @@ class Gitick:
     def in_progress( self ):
         return self.get_tickets_from_parent("in-progress")
 
-    def new_tickets( self):
+    def new_tickets( self ):
         return self.get_tickets_from_parent("new")
 
+    
+    
 ##---------------------------------------------------------##
 ## just for testing ##
 
@@ -92,36 +142,3 @@ WIP = PROJ.in_progress()
 #         l = f.read()
 #         f.close()
 #     return l.rstrip()
-
-# def new():
-#     gitick_project = 'gitick.' + input( 'project name: ' )
-
-#     sh.mkdir( gitick_project )
-#     sh.cd( gitick_project )
-#     sh.echo( '.', _out='.gitick' )
-#     sh.mkdir( 'new' )
-#     sh.echo( '..', _out='new/.gitick' )
-#     sh.mkdir( 'new/need-info' )
-#     sh.echo( '../..', _out='new/need-info/.gitick' )
-#     sh.git( 'init', '.' )
-#     sh.git( 'add', '.' )
-#     sh.git( 'commit', '-m', str("initial commit for " + gitick_project) )
-
-        
-        
-# def user():
-#     curdir = str(sh.pwd()).rstrip()
-#     sh.cd( home() )
-
-#     name = input( 'New user name: ' )
-#     sh.mkdir( name )
-#     sh.cd(name)
-#     sh.mkdir('in-progress', 'need-info', 'test')
-#     sh.echo( '../..', _out='in-progress/.gitick' )
-#     sh.echo( '../..', _out='need-info/.gitick' )
-#     sh.echo( '../..', _out='test/.gitick' )
-
-#     sh.git('add', '.')
-#     sh.git('commit', '-m', str("adding user " + name))
-
-#     sh.cd(curdir)
